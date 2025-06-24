@@ -107,9 +107,12 @@ h4 {
     margin: 4px 0px;
 }
 
-#projects-sidebar button:hover,
-#projectsidebar .selected {
+#projects-sidebar button:hover {
     background-color: var(--grey-color);
+}
+
+.selected {
+    background-color: var(--grey-color) !important;
 }
 
 .view-btn .lucide {
