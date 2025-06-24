@@ -7,6 +7,7 @@ import {
   LayoutList,
   CalendarClock,
   ListChecks,
+  Trash2,
 } from "lucide";
 
 function renderProjects() {
@@ -14,7 +15,7 @@ function renderProjects() {
   sidebarViews.innerHTML = "";
 
   const views = [
-    { label: "All", mode: ViewMode.ALL, iconName: "layout-list" },
+    { label: "All Tasks", mode: ViewMode.ALL, iconName: "layout-list" },
     { label: "Today", mode: ViewMode.TODAY, iconName: "calendar-clock" },
     { label: "Completed", mode: ViewMode.COMPLETED, iconName: "list-checks" },
   ];
@@ -68,7 +69,7 @@ function renderProjects() {
   const newProjectBtn = document.getElementById("new-project-btn");
   newProjectBtn.onclick = () => {
     const name = prompt("Project name:");
-    if (!name) return;
+    if (!name || name.trim() === "") return;
 
     app.addProject(name);
     renderProjects();
@@ -77,10 +78,9 @@ function renderProjects() {
 }
 
 function renderTodos() {
-  const container = document.getElementById("tasks-container");
   const title = document.getElementById("project-title");
-  const list = document.getElementById("tasks-container");
-  list.innerHTML = "";
+  const tableBody = document.getElementById("tasks-table-body");
+  tableBody.innerHTML = "";
 
   const todosToShow = [];
 
@@ -119,19 +119,48 @@ function renderTodos() {
   }
 
   todosToShow.forEach((todo) => {
-    const div = document.createElement("div");
-    div.textContent - `${todo.title} - ${todo.dueDate}`;
-    list.appendChild(div);
-  });
+    const row = document.createElement("tr");
 
-  // const project = app.getActiveProject();
-  // title.textContent = project.name;
-  // container.innerHTML = "";
-  // project.todos.forEach((todo) => {
-  //   const div = document.createElement("div");
-  //   div.textContent = `${todo.title} (${todo.dueDate})`;
-  //   container.appendChild(div);
-  // });
+    const doneCell = document.createElement("td");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = todo.completed;
+    checkbox.onchange = () => {
+      todo.completed = checkbox.checked;
+      renderTodos();
+    };
+    doneCell.appendChild(checkbox);
+    row.appendChild(doneCell);
+
+    const titleCell = document.createElement("td");
+    titleCell.textContent = todo.title;
+    row.appendChild(titleCell);
+
+    const dateCell = document.createElement("td");
+    dateCell.textContent = todo.dueDate || "-";
+    row.appendChild(dateCell);
+
+    const priorityCell = document.createElement("td");
+    priorityCell.textContent = todo.priority || "None";
+    row.appendChild(priorityCell);
+
+    const actionsCell = document.createElement("td");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = `<i data-lucide="trash-2"></i>`;
+    deleteBtn.onclick = () => {
+      const project = app.state.projects.find((p) => p.todos.includes(todo));
+      if (!project) return;
+      project.todos = project.todos.filter((t) => t !== todo);
+      renderTodos();
+    };
+    createIcons({
+      icons: Trash2,
+    });
+    actionsCell.appendChild(deleteBtn);
+    row.appendChild(actionsCell);
+
+    tableBody.appendChild(row);
+  });
 }
 
 export default {
