@@ -1,5 +1,6 @@
 import app from "./state";
 import { ViewMode } from "./constants";
+import { showTaskForm } from "./form";
 
 import {
   createIcons,
@@ -8,7 +9,6 @@ import {
   CalendarClock,
   ListChecks,
   Trash2,
-  View,
 } from "lucide";
 
 function renderProjects() {
@@ -41,6 +41,7 @@ function renderProjects() {
         LayoutList,
         CalendarClock,
         ListChecks,
+        Trash2,
       },
     });
   });
@@ -78,7 +79,7 @@ function renderProjects() {
   };
 }
 
-function renderTasks() {
+export function renderTasks() {
   const header = document.getElementById("tasks-header");
   const title = document.getElementById("project-title");
   const tableBody = document.getElementById("tasks-table-body");
