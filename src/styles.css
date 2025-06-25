@@ -22,6 +22,7 @@ body {
     -webkit-font-smoothing: antialiased;
     background-color: var(--background-color);
     color: var(--white-color);
+    width: 100vw;
 }
 
 img,
@@ -38,6 +39,7 @@ button,
 textarea,
 select {
     font: inherit;
+    cursor: pointer;
 }
 
 p,
@@ -60,6 +62,7 @@ h6 {
     margin: 0 auto;
     height: 100vh;
     display: flex;
+    width: 100vw;
 }
 
 #projects-sidebar {
@@ -113,7 +116,8 @@ h4 {
     margin: 4px 0px;
 }
 
-#projects-sidebar button:hover {
+#projects-sidebar button:hover,
+tr:hover {
     background-color: var(--grey-color);
 }
 
@@ -158,7 +162,7 @@ h4 {
 #tasks-header {
     align-self: center;
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
 }
 
 #tasks-table {
@@ -169,36 +173,59 @@ h4 {
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.col-done {
+    width: 6%;
+}
+
+.col-title {
+    width: 59%;
+}
+.col-date {
+    width: 15%;
+}
+.col-prio {
+    width: 10%;
+}
+.col-actions {
+    width: 10%;
 }
 
 th {
     padding: 4px 8px;
 }
 
-tr {
-    /* border-top: 2px solid var(--border-color); */
+td {
+    padding: 8px 8px;
+    border-top: 2px solid var(--border-color);
+    overflow: hidden;
+    text-align: center;
 }
 
-td {
-    padding: 30px;
-    border-top: 2px solid var(--border-color);
+td:nth-child(2),
+th:nth-child(2) {
+    text-align: left;
+}
+
+td:nth-child(3),
+th:nth-child(3) {
+    text-align: left;
 }
 
 #side-panel {
-    /* top: 0;
-    right: 0; */
     width: 20vw;
     max-width: 320px;
     min-width: 180px;
     display: flex;
     flex-direction: column;
-    padding: 36px 12px;
+    padding: 36px 16px;
     text-align: left;
     height: 100vh;
     background: var(--black-color);
     z-index: 1000;
     overflow-y: scroll;
-    animation: slideIn 0.3s ease-out forwards;
     border-left: var(--border);
 }
 
@@ -206,4 +233,9 @@ td {
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.side-modal label {
+    display: flex;
+    flex-direction: column;
 }
