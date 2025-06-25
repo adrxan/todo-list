@@ -8,6 +8,7 @@ import {
   CalendarClock,
   ListChecks,
   Trash2,
+  View,
 } from "lucide";
 
 function renderProjects() {
@@ -31,7 +32,7 @@ function renderProjects() {
     btn.onclick = () => {
       app.setViewMode(mode);
       renderProjects();
-      renderTodos();
+      renderTasks();
     };
     sidebarViews.appendChild(btn);
     createIcons({
@@ -61,7 +62,7 @@ function renderProjects() {
       app.state.activeProjectId = project.id;
       app.setViewMode(ViewMode.PROJECT);
       renderProjects();
-      renderTodos();
+      renderTasks();
     };
     sidebarProjects.appendChild(btn);
   });
@@ -73,16 +74,17 @@ function renderProjects() {
 
     app.addProject(name);
     renderProjects();
-    renderTodos();
+    renderTasks();
   };
 }
 
-function renderTodos() {
+function renderTasks() {
+  const header = document.getElementById("tasks-header");
   const title = document.getElementById("project-title");
   const tableBody = document.getElementById("tasks-table-body");
   tableBody.innerHTML = "";
 
-  const todosToShow = [];
+  const tasksToShow = [];
 
   const mode = app.state.viewMode;
 
@@ -95,63 +97,81 @@ function renderTodos() {
     }
 
     title.textContent = project.name;
-    todosToShow.push(...project.todos);
+    tasksToShow.push(...project.tasks);
   }
 
   if (mode === ViewMode.ALL) {
     title.textContent = "All Tasks";
-    app.state.projects.forEach((p) => todosToShow.push(...p.todos));
+    app.state.projects.forEach((p) => tasksToShow.push(...p.tasks));
   }
 
   if (mode === ViewMode.TODAY) {
     title.textContent = "Today";
     const today = new Date().toISOString().split("T")[0];
     app.state.projects.forEach((p) => {
-      todosToShow.push(...p.todos.filter((t) => t.dueDate === today));
+      tasksToShow.push(...p.tasks.filter((t) => t.dueDate === today));
     });
   }
 
   if (mode === ViewMode.COMPLETED) {
     title.textContent = "Completed";
     app.state.projects.forEach((p) => {
-      todosToShow.push(...p.todos.filter((t) => t.completed));
+      tasksToShow.push(...p.tasks.filter((t) => t.completed));
     });
   }
 
-  todosToShow.forEach((todo) => {
+  const oldForm = document.getElementById("new-task-form");
+  if (oldForm) oldForm.remove();
+
+  const oldAddBtn = document.getElementById("add-task-btn");
+  if (oldAddBtn) oldAddBtn.remove();
+
+  if (app.state.viewMode === ViewMode.PROJECT) {
+    const addTaskBtn = document.createElement("button");
+    addTaskBtn.textContent = "Add Task";
+    addTaskBtn.id = "add-task-btn";
+
+    addTaskBtn.onclick = () => {
+      showTaskForm();
+    };
+
+    header.append(addTaskBtn);
+  }
+
+  tasksToShow.forEach((task) => {
     const row = document.createElement("tr");
 
     const doneCell = document.createElement("td");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.checked = todo.completed;
+    checkbox.checked = task.completed;
     checkbox.onchange = () => {
-      todo.completed = checkbox.checked;
-      renderTodos();
+      task.completed = checkbox.checked;
+      renderTasks();
     };
     doneCell.appendChild(checkbox);
     row.appendChild(doneCell);
 
     const titleCell = document.createElement("td");
-    titleCell.textContent = todo.title;
+    titleCell.textContent = task.title;
     row.appendChild(titleCell);
 
     const dateCell = document.createElement("td");
-    dateCell.textContent = todo.dueDate || "-";
+    dateCell.textContent = task.dueDate || "-";
     row.appendChild(dateCell);
 
     const priorityCell = document.createElement("td");
-    priorityCell.textContent = todo.priority || "None";
+    priorityCell.textContent = task.priority || "None";
     row.appendChild(priorityCell);
 
     const actionsCell = document.createElement("td");
     const deleteBtn = document.createElement("button");
     deleteBtn.innerHTML = `<i data-lucide="trash-2"></i>`;
     deleteBtn.onclick = () => {
-      const project = app.state.projects.find((p) => p.todos.includes(todo));
+      const project = app.state.projects.find((p) => p.tasks.includes(task));
       if (!project) return;
-      project.todos = project.todos.filter((t) => t !== todo);
-      renderTodos();
+      project.tasks = project.tasks.filter((t) => t !== task);
+      renderTasks();
     };
     createIcons({
       icons: Trash2,
@@ -165,5 +185,5 @@ function renderTodos() {
 
 export default {
   renderProjects,
-  renderTodos,
+  renderTasks,
 };
