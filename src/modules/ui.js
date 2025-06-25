@@ -1,15 +1,7 @@
 import app from "./state";
 import { ViewMode } from "./constants";
 import { showTaskForm } from "./form";
-
-import {
-  createIcons,
-  Plus,
-  LayoutList,
-  CalendarClock,
-  ListChecks,
-  Trash2,
-} from "lucide";
+import { refreshIcons } from "./icons";
 
 function renderProjects() {
   const sidebarViews = document.getElementById("projects-views");
@@ -35,15 +27,7 @@ function renderProjects() {
       renderTasks();
     };
     sidebarViews.appendChild(btn);
-    createIcons({
-      icons: {
-        Plus,
-        LayoutList,
-        CalendarClock,
-        ListChecks,
-        Trash2,
-      },
-    });
+    refreshIcons();
   });
 
   const sidebarProjects = document.getElementById("projects-container");
@@ -174,13 +158,12 @@ export function renderTasks() {
       project.tasks = project.tasks.filter((t) => t !== task);
       renderTasks();
     };
-    createIcons({
-      icons: Trash2,
-    });
+
     actionsCell.appendChild(deleteBtn);
     row.appendChild(actionsCell);
 
     tableBody.appendChild(row);
+    refreshIcons();
   });
 }
 
