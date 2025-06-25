@@ -1,4 +1,4 @@
-export default function createTodo({
+export default function createTask({
   title,
   description,
   dueDate,
