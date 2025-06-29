@@ -143,7 +143,8 @@ tr:hover {
     margin: -8px 0 0 0;
 }
 
-#projects-sidebar .delete-btn:hover {
+#projects-sidebar .delete-btn:hover,
+td:last-child button:hover {
     opacity: 50%;
 }
 
