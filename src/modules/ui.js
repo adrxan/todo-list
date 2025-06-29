@@ -1,7 +1,9 @@
 import app from "./state";
 import { ViewMode } from "./constants";
 import { showTaskForm } from "./form";
+import { showTaskDetails, isTaskCurrentlyViewed } from "./taskdetails";
 import { refreshIcons } from "./icons";
+import { clearSidePanel } from "./sidePanel";
 
 function renderProjects() {
   const sidebarViews = document.getElementById("projects-views");
@@ -116,19 +118,23 @@ export function renderTasks() {
   if (oldAddBtn) oldAddBtn.remove();
 
   if (app.state.viewMode === ViewMode.PROJECT) {
-    const addTaskBtn = document.createElement("button");
-    addTaskBtn.textContent = "Add Task";
-    addTaskBtn.id = "add-task-btn";
+    let addTaskBtn = document.getElementById("new-task-btn");
+    if (!addTaskBtn) {
+      addTaskBtn = document.createElement("button");
+      addTaskBtn.textContent = "New Task";
+      addTaskBtn.id = "new-task-btn";
 
-    addTaskBtn.onclick = () => {
-      showTaskForm();
-    };
+      addTaskBtn.onclick = () => {
+        showTaskForm();
+      };
 
-    header.append(addTaskBtn);
+      header.append(addTaskBtn);
+    }
   }
 
   tasksToShow.forEach((task) => {
     const row = document.createElement("tr");
+    row.dataset.taskId = task.id;
 
     const doneCell = document.createElement("td");
 
@@ -141,6 +147,9 @@ export function renderTasks() {
     checkbox.onchange = () => {
       task.completed = checkbox.checked;
       renderTasks();
+      if (isTaskCurrentlyViewed(task.id)) {
+        showTaskDetails(task);
+      }
     };
     customCheckboxContainer.appendChild(checkbox);
 
@@ -167,6 +176,14 @@ export function renderTasks() {
     row.appendChild(priorityCell);
 
     const actionsCell = document.createElement("td");
+
+    const viewBtn = document.createElement("button");
+    viewBtn.innerHTML = `<i data-lucide="info"></i>`;
+    viewBtn.classList.add("view-btn");
+    viewBtn.onclick = () => {
+      showTaskDetails(task);
+    };
+
     const deleteBtn = document.createElement("button");
     deleteBtn.innerHTML = `<i data-lucide="trash-2"></i>`;
     deleteBtn.onclick = () => {
@@ -176,6 +193,7 @@ export function renderTasks() {
       renderTasks();
     };
 
+    actionsCell.append(viewBtn);
     actionsCell.appendChild(deleteBtn);
     row.appendChild(actionsCell);
 
