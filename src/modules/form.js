@@ -13,7 +13,7 @@ export function showTaskForm() {
         <label
             >Title <input type="text" name="title" required
         /></label>
-        <label>Description <input type="text" name="description" /></label>
+        <label>Description <textarea name="description" class="description-area" /></textarea></label>
         <label>Due Date <input type="date" name="dueDate" /></label>
         <label
             >Priority
