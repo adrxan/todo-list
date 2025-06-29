@@ -3,7 +3,6 @@ import { ViewMode } from "./constants";
 import { showTaskForm } from "./form";
 import { showTaskDetails, isTaskCurrentlyViewed } from "./taskdetails";
 import { refreshIcons } from "./icons";
-import { clearSidePanel } from "./sidePanel";
 
 function renderProjects() {
   const sidebarViews = document.getElementById("projects-views");
@@ -71,8 +70,13 @@ export function renderTasks() {
   const tableBody = document.getElementById("tasks-table-body");
   tableBody.innerHTML = "";
 
-  const tasksToShow = [];
+  const oldAddBtn = document.getElementById("new-task-btn");
+  if (oldAddBtn) oldAddBtn.remove();
 
+  const oldForm = document.getElementById("new-task-form");
+  if (oldForm) oldForm.remove();
+
+  const tasksToShow = [];
   const mode = app.state.viewMode;
 
   if (mode === ViewMode.PROJECT) {
@@ -87,13 +91,21 @@ export function renderTasks() {
     tasksToShow.push(...project.tasks);
   }
 
+  const newTaskBtn = document.createElement("button");
+  newTaskBtn.id = "new-task-btn";
+  newTaskBtn.textContent = "New Task";
+  newTaskBtn.onclick = () => showTaskForm();
+  header.append(newTaskBtn);
+
   if (mode === ViewMode.ALL) {
     title.textContent = "All Tasks";
+    newTaskBtn.style.display = "none";
     app.state.projects.forEach((p) => tasksToShow.push(...p.tasks));
   }
 
   if (mode === ViewMode.TODAY) {
     title.textContent = "Today";
+    newTaskBtn.style.display = "none";
     const today = new Date().toISOString().split("T")[0];
     app.state.projects.forEach((p) => {
       tasksToShow.push(...p.tasks.filter((t) => t.dueDate === today));
@@ -102,34 +114,19 @@ export function renderTasks() {
 
   if (mode === ViewMode.COMPLETED) {
     title.textContent = "Completed";
+    newTaskBtn.style.display = "none";
     app.state.projects.forEach((p) => {
       tasksToShow.push(...p.tasks.filter((t) => t.completed));
     });
   }
 
-  tasksToShow.sort((a, b) => {
-    return Number(a.completed) - Number(b.completed);
-  });
-
-  const oldForm = document.getElementById("new-task-form");
-  if (oldForm) oldForm.remove();
-
-  const oldAddBtn = document.getElementById("add-task-btn");
-  if (oldAddBtn) oldAddBtn.remove();
+  tasksToShow.sort((a, b) => Number(a.completed) - Number(b.completed));
 
   if (app.state.viewMode === ViewMode.PROJECT) {
-    let addTaskBtn = document.getElementById("new-task-btn");
-    if (!addTaskBtn) {
-      addTaskBtn = document.createElement("button");
-      addTaskBtn.textContent = "New Task";
-      addTaskBtn.id = "new-task-btn";
-
-      addTaskBtn.onclick = () => {
-        showTaskForm();
-      };
-
-      header.append(addTaskBtn);
-    }
+    newTaskBtn.style.display = "block";
+    newTaskBtn.onclick = () => {
+      showTaskForm();
+    };
   }
 
   tasksToShow.forEach((task) => {
