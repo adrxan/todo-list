@@ -37,23 +37,23 @@ export function showTaskDetails(task) {
     panel.innerHTML = `
       <div class="task-details-content">
             <h3>Edit Task</h3>
-            <label for="edit-title">Title:</label>
-            <input type="text" id="edit-title" value="${task.title}">
-            <label for="edit-description">Description:</label>
-            <textarea id="edit-description">${task.description || ""}</textarea>
-            <label for="edit-dueDate">Due Date:</label>
-            <input type="date" id="edit-dueDate" value="${task.dueDate || ""}">
-            <label for="edit-priority">Priority:</label>
-            <select id="edit-priority">
+            <label for="edit-title">Title: <input type="text" id="edit-title" value="${task.title}"></label>
+
+            <label for="edit-description">Description: <textarea id="edit-description" class="description-area">${task.description || ""}</textarea></label>
+
+            <label for="edit-dueDate">Due Date: <input type="date" id="edit-dueDate" value="${task.dueDate || ""}"></label>
+
+            <label for="edit-priority">Priority: <select id="edit-priority">
               <option value="None" ${task.priority === "None" ? "selected" : ""}>None</option>
               <option value="Low" ${task.priority === "Low" ? "selected" : ""}>Low</option>
               <option value="Medium" ${task.priority === "Medium" ? "selected" : ""}>Medium</option>
               <option value="High" ${task.priority === "High" ? "selected" : ""}>High</option>
-            </select>
-            <label for="edit-notes">Notes:</label>
-            <textarea id="edit-notes">${task.notes || ""}</textarea>
-            <label for="edit-completed">Completed:</label>
-            <input type="checkbox" id="edit-completed" ${task.completed ? "checked" : ""}>
+            </select></label>
+
+            <label for="edit-notes">Notes: <textarea id="edit-notes">${task.notes || ""}</textarea></label>
+
+            <label for="edit-completed" class="horizontal">Completed: <input type="checkbox" id="edit-completed" ${task.completed ? "checked" : ""}></label>
+
             <div class="details-actions">
               <button id="save-details-btn"><i data-lucide="save"></i> Save</button>
               <button id="cancel-edit-btn"><i data-lucide="x"></i> Cancel</button>
