@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://rsms.me/" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <title>To-Do</title>
+    <script defer src="main.js"></script></head>
+    <body>
+        <div id="page-container">
+            <aside id="projects-sidebar">
+                <div id="projects-header">
+                    <h4>Projects</h4>
+                    <button class="new-btn" id="new-project-btn">
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
+                <div id="projects-views"></div>
+                <hr class="divider" />
+                <div id="projects-container"></div>
+            </aside>
+            <main id="main-container">
+                <div id="tasks-header">
+                    <h2 id="project-title">Project Title</h2>
+                </div>
+                <div id="table-container">
+                    <table id="tasks-table">
+                        <colgroup>
+                            <col class="col-done" />
+                            <col class="col-title" />
+                            <col class="col-date" />
+                            <col class="col-prio" />
+                            <col class="col-actions" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-table-body"></tbody>
+                    </table>
+                </div>
+            </main>
+            <aside id="side-panel"></aside>
+        </div>
+    </body>
+</html>
