@@ -175,6 +175,21 @@ tr:hover {
     max-width: 800px;
 }
 
+#new-task-btn,
+form button {
+    background-color: var(--grey-color);
+    color: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+#new-task-btn:hover,
+form button:hover {
+    background-color: var(--background-color);
+}
+
 #tasks-table {
     align-self: center;
     text-align: left;
@@ -224,6 +239,19 @@ td:nth-child(2) {
 td:nth-child(3),
 th:nth-child(3) {
     text-align: left;
+}
+
+td:last-child {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+td:last-child button {
+    background-color: transparent;
+    color: var(--white-color);
+    border: none;
+    cursor: pointer;
+    width: 24px;
 }
 
 tr {
