@@ -94,7 +94,7 @@ export function renderTasks() {
       return;
     }
 
-    title.textContent = project.name;
+    title.textContent = `Projects / ${project.name}`;
     tasksToShow.push(...project.tasks);
     newTaskBtn.style.display = "block";
   } else if (mode === ViewMode.ALL) {
@@ -116,7 +116,13 @@ export function renderTasks() {
     });
   }
 
-  tasksToShow.sort((a, b) => Number(a.completed) - Number(b.completed));
+  tasksToShow.sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return Number(a.completed) - Number(b.completed);
+    }
+
+    return b.id - a.id;
+  });
 
   const fragment = document.createDocumentFragment();
 
