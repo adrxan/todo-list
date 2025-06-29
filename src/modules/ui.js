@@ -28,8 +28,8 @@ function renderProjects() {
       renderTasks();
     };
     sidebarViews.appendChild(btn);
-    refreshIcons();
   });
+  refreshIcons();
 
   const sidebarProjects = document.getElementById("projects-container");
   sidebarProjects.innerHTML = "";
@@ -79,40 +79,36 @@ export function renderTasks() {
   const tasksToShow = [];
   const mode = app.state.viewMode;
 
-  if (mode === ViewMode.PROJECT) {
-    const project = app.getActiveProject();
-
-    if (!project) {
-      title.textContent = "No Project Selected";
-      return;
-    }
-
-    title.textContent = project.name;
-    tasksToShow.push(...project.tasks);
-  }
-
   const newTaskBtn = document.createElement("button");
   newTaskBtn.id = "new-task-btn";
   newTaskBtn.textContent = "New Task";
   newTaskBtn.onclick = () => showTaskForm();
   header.append(newTaskBtn);
 
-  if (mode === ViewMode.ALL) {
+  if (mode === ViewMode.PROJECT) {
+    const project = app.getActiveProject();
+
+    if (!project) {
+      title.textContent = "No Project Selected";
+      newTaskBtn.style.display = "none";
+      return;
+    }
+
+    title.textContent = project.name;
+    tasksToShow.push(...project.tasks);
+    newTaskBtn.style.display = "block";
+  } else if (mode === ViewMode.ALL) {
     title.textContent = "All Tasks";
     newTaskBtn.style.display = "none";
     app.state.projects.forEach((p) => tasksToShow.push(...p.tasks));
-  }
-
-  if (mode === ViewMode.TODAY) {
+  } else if (mode === ViewMode.TODAY) {
     title.textContent = "Today";
     newTaskBtn.style.display = "none";
     const today = new Date().toISOString().split("T")[0];
     app.state.projects.forEach((p) => {
       tasksToShow.push(...p.tasks.filter((t) => t.dueDate === today));
     });
-  }
-
-  if (mode === ViewMode.COMPLETED) {
+  } else if (mode === ViewMode.COMPLETED) {
     title.textContent = "Completed";
     newTaskBtn.style.display = "none";
     app.state.projects.forEach((p) => {
@@ -122,12 +118,7 @@ export function renderTasks() {
 
   tasksToShow.sort((a, b) => Number(a.completed) - Number(b.completed));
 
-  if (app.state.viewMode === ViewMode.PROJECT) {
-    newTaskBtn.style.display = "block";
-    newTaskBtn.onclick = () => {
-      showTaskForm();
-    };
-  }
+  const fragment = document.createDocumentFragment();
 
   tasksToShow.forEach((task) => {
     const row = document.createElement("tr");
@@ -194,13 +185,15 @@ export function renderTasks() {
     actionsCell.appendChild(deleteBtn);
     row.appendChild(actionsCell);
 
-    tableBody.appendChild(row);
-    refreshIcons();
+    fragment.appendChild(row);
 
     if (task.completed) {
       row.classList.add("completed");
     }
   });
+
+  tableBody.appendChild(fragment);
+  refreshIcons();
 }
 
 export default {
