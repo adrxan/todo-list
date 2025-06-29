@@ -23,6 +23,7 @@ export function showTaskForm() {
                 <option value="!!!">High</option>
             </select>
         </label>
+        <label>Notes <textarea name="notes"></textarea></label>
         <div class="actions">
             <button type="submit" id="submit-form-btn">Add</button>
             <button type="button" id="cancel-btn">Cancel</button>
@@ -43,6 +44,7 @@ export function showTaskForm() {
       title: formData.get("title"),
       dueDate: formData.get("dueDate"),
       priority: formData.get("priority"),
+      notes: formData.get("notes"),
     });
 
     const project = app.getActiveProject();
