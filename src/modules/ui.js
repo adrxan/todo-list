@@ -36,6 +36,40 @@ function renderProjects() {
   app.state.projects.forEach((project) => {
     const btn = document.createElement("button");
     btn.textContent = project.name;
+    btn.classList.add("project-btn");
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = `<i data-lucide="trash-2"></i>`;
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.style.display = "none";
+    deleteBtn.onclick = (e) => {
+      e.stopPropagation();
+      const confirmDelete = confirm(
+        `Are you sure you want to delete the project "${project.name}"? This action cannot be undone.`,
+      );
+      if (confirmDelete) {
+        if (app.state.projects) {
+          app.state.projects = app.state.projects.filter(
+            (p) => p.id !== project.id,
+          );
+        }
+
+        if (app.state.activeProjectId === project.id) {
+          app.state.activeProjectId = null;
+          app.setViewMode(ViewMode.ALL);
+        }
+        renderProjects();
+        renderTasks();
+      }
+    };
+
+    btn.addEventListener("mouseenter", () => {
+      deleteBtn.style.display = "block";
+    });
+
+    btn.addEventListener("mouseleave", () => {
+      deleteBtn.style.display = "none";
+    });
 
     if (
       app.state.viewMode === ViewMode.PROJECT &&
@@ -51,6 +85,8 @@ function renderProjects() {
       renderTasks();
     };
     sidebarProjects.appendChild(btn);
+    btn.appendChild(deleteBtn);
+    refreshIcons();
   });
 
   const newProjectBtn = document.getElementById("new-project-btn");
