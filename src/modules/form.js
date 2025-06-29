@@ -1,18 +1,19 @@
 import createTask from "./task";
 import app from "./state";
 import { renderTasks } from "./ui";
+import { clearSidePanel } from "./sidePanel";
 
 export function showTaskForm() {
-  if (document.getElementById("task-modal")) return;
+  clearSidePanel();
 
-  const modal = document.createElement("div");
-  modal.id = "task-modal";
-  modal.innerHTML = `
+  const panel = document.getElementById("side-panel");
+  panel.innerHTML = `
     <form id="new-task-form">
         <h3>New Task</h3>
         <label
             >Title <input type="text" name="title" required
         /></label>
+        <label>Description <input type="text" name="description" /></label>
         <label>Due Date <input type="date" name="dueDate" /></label>
         <label
             >Priority
@@ -30,21 +31,25 @@ export function showTaskForm() {
         </div>
     </form>`;
 
-  modal.classList.add("side-modal");
+  const form = document.querySelector("#new-task-form");
 
-  const panel = document.getElementById("side-panel");
-  panel.appendChild(modal);
-
-  const form = modal.querySelector("#new-task-form");
   form.onsubmit = (e) => {
     e.preventDefault();
+
     const formData = new FormData(form);
+    const title = formData.get("title").trim();
+
+    if (!title) {
+      alert("Task title is required.");
+      return;
+    }
 
     const newTask = createTask({
-      title: formData.get("title"),
-      dueDate: formData.get("dueDate"),
-      priority: formData.get("priority"),
-      notes: formData.get("notes"),
+      title,
+      description: formData.get("description") || "None",
+      dueDate: formData.get("dueDate") || null,
+      priority: formData.get("priority") || "None",
+      notes: formData.get("notes") || "",
     });
 
     const project = app.getActiveProject();
@@ -54,14 +59,10 @@ export function showTaskForm() {
     }
 
     project.tasks.push(newTask);
-    closeTaskForm();
+
+    clearSidePanel();
     renderTasks();
   };
 
-  modal.querySelector("#cancel-btn").onclick = closeTaskForm;
-}
-
-export function closeTaskForm() {
-  const modal = document.getElementById("task-modal");
-  if (modal) modal.remove();
+  panel.querySelector("#cancel-btn").onclick = clearSidePanel;
 }
