@@ -5,6 +5,8 @@ import {
   CalendarClock,
   ListChecks,
   Trash2,
+  Square,
+  SquareCheck,
 } from "lucide";
 
 export const icons = {
@@ -13,6 +15,8 @@ export const icons = {
   CalendarClock,
   ListChecks,
   Trash2,
+  Square,
+  SquareCheck,
 };
 
 export function refreshIcons() {
