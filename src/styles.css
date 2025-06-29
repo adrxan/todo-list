@@ -71,7 +71,6 @@ h6 {
     display: flex;
     margin: 0 auto;
     height: 100vh;
-    display: flex;
     width: 100vw;
 }
 
@@ -131,6 +130,23 @@ tr:hover {
     background-color: var(--grey-color);
 }
 
+#projects-sidebar .project-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#projects-sidebar .delete-btn {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin: -8px 0 0 0;
+}
+
+#projects-sidebar .delete-btn:hover {
+    opacity: 50%;
+}
+
 .selected {
     background-color: var(--grey-color) !important;
     font-weight: 600;
@@ -152,14 +168,15 @@ tr:hover {
     flex-direction: column;
     align-content: center;
     padding: 40px 16px;
-    width: 60vw;
+    width: 100%;
+    min-width: 600px;
     overflow: scroll;
 }
 
 #table-container {
     border: 2px solid var(--grey-color);
     border-radius: 6px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #tasks-header {
@@ -182,6 +199,7 @@ tr:hover {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 4px 8px;
+    font-weight: 700;
     cursor: pointer;
 }
 
@@ -198,6 +216,7 @@ tr:hover {
 table {
     display: table;
     width: 100%;
+    min-width: 650px;
     border-collapse: collapse;
     table-layout: fixed;
 }
@@ -298,7 +317,7 @@ tr.completed {
 #side-panel {
     width: 20vw;
     max-width: 320px;
-    min-width: 180px;
+    min-width: 250px;
     display: flex;
     flex-direction: column;
     padding: 36px 16px;
