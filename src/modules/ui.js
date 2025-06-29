@@ -105,6 +105,10 @@ export function renderTasks() {
     });
   }
 
+  tasksToShow.sort((a, b) => {
+    return Number(a.completed) - Number(b.completed);
+  });
+
   const oldForm = document.getElementById("new-task-form");
   if (oldForm) oldForm.remove();
 
@@ -127,6 +131,10 @@ export function renderTasks() {
     const row = document.createElement("tr");
 
     const doneCell = document.createElement("td");
+
+    const customCheckboxContainer = document.createElement("div");
+    customCheckboxContainer.classList.add("custom-checkbox");
+
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = task.completed;
@@ -134,7 +142,16 @@ export function renderTasks() {
       task.completed = checkbox.checked;
       renderTasks();
     };
-    doneCell.appendChild(checkbox);
+    customCheckboxContainer.appendChild(checkbox);
+
+    const customIconDisplay = document.createElement("span");
+    customIconDisplay.classList.add("custom-icon-display");
+    customCheckboxContainer.appendChild(customIconDisplay);
+
+    const iconName = checkbox.checked ? "square-check" : "square";
+    customIconDisplay.innerHTML = `<i data-lucide="${iconName}"></i>`;
+
+    doneCell.appendChild(customCheckboxContainer);
     row.appendChild(doneCell);
 
     const titleCell = document.createElement("td");
@@ -164,6 +181,10 @@ export function renderTasks() {
 
     tableBody.appendChild(row);
     refreshIcons();
+
+    if (task.completed) {
+      row.classList.add("completed");
+    }
   });
 }
 
